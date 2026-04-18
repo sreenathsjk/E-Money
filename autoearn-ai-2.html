@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AutoEarn AI — Premium Money Intelligence Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#04060a;--deep:#080c12;--card:#0b1018;--card2:#0e1520;
+  --rim:#1a2535;--rim2:#243040;
+  --gold:#c9a84c;--gold2:#f0cc6a;--gold3:#ffe08a;
+  --teal:#00d4aa;--teal2:#00f5c4;
+  --rose:#ff4d6d;--violet:#8b5cf6;--sky:#38bdf8;
+  --text:#dde4ef;--sub:#7a8a9e;--dim:#3d4f62;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5}
+.amb{position:fixed;border-radius:50%;filter:blur(160px);pointer-events:none;z-index:0}
+.amb-1{width:700px;height:700px;background:radial-gradient(circle,rgba(201,168,76,.1),transparent 70%);top:-300px;right:-200px;animation:d1 20s ease-in-out infinite}
+.amb-2{width:600px;height:600px;background:radial-gradient(circle,rgba(0,212,170,.07),transparent 70%);bottom:-200px;left:-200px;animation:d2 25s ease-in-out infinite}
+.amb-3{width:400px;height:400px;background:radial-gradient(circle,rgba(139,92,246,.06),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:d3 18s ease-in-out infinite}
+@keyframes d1{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,50px)}}
+@keyframes d2{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,-40px)}}
+@keyframes d3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.2)}}
+.gridbg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(201,168,76,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.022) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+nav{position:sticky;top:0;z-index:200;background:rgba(4,6,10,.9);backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(201,168,76,.1)}
+.logo-txt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;background:linear-gradient(135deg,var(--gold2),var(--gold3),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-badge{font-size:8px;font-weight:800;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;padding:2px 6px;border-radius:4px;font-family:'Outfit',sans-serif}
+.fpill{padding:6px 16px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--rim);color:var(--sub);cursor:pointer;transition:all .2s;white-space:nowrap;background:rgba(255,255,255,.02);font-family:'Outfit',sans-serif}
+.fpill:hover{border-color:rgba(201,168,76,.4);color:var(--gold2)}
+.fpill.act{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(240,204,106,.06));border-color:rgba(201,168,76,.5);color:var(--gold2)}
+.srch-wrap{position:relative}
+.srch-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none}
+.srch{background:rgba(255,255,255,.03);border:1px solid var(--rim);border-radius:12px;padding:8px 14px 8px 38px;color:var(--text);font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:all .25s;width:200px}
+.srch:focus{border-color:rgba(201,168,76,.45);box-shadow:0 0 0 3px rgba(201,168,76,.07);width:240px}
+.srch::placeholder{color:var(--dim)}
+.hero-strip{background:linear-gradient(135deg,rgba(201,168,76,.05),rgba(0,212,170,.03),rgba(139,92,246,.03));border-bottom:1px solid rgba(201,168,76,.08)}
+.stat-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--rim);border-radius:16px;padding:16px 20px;flex:1;min-width:120px;transition:all .3s;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.05),transparent);opacity:0;transition:opacity .3s}
+.stat-card:hover{border-color:rgba(201,168,76,.28);transform:translateY(-2px)}.stat-card:hover::before{opacity:1}
+.stat-val{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;line-height:1}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--rim)}
+.sec-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700}
+.sec-count{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--sub);padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--rim);font-family:'Outfit',sans-serif}
+.o-card{background:linear-gradient(145deg,var(--card),var(--card2));border:1px solid var(--rim);border-radius:18px;padding:20px;transition:all .32s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;cursor:pointer}
+.shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.025),transparent);transition:left .6s ease;pointer-events:none}
+.o-card:hover .shine{left:150%}
+.o-card:hover{border-color:rgba(201,168,76,.35);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.08),0 8px 24px rgba(201,168,76,.07)}
+.o-card.top{border-color:rgba(201,168,76,.28);background:linear-gradient(145deg,#0c1019,#0f120c)}
+.o-card.top:hover{border-color:rgba(201,168,76,.6);box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(201,168,76,.18),0 8px 32px rgba(201,168,76,.1)}
+.o-card.top::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(201,168,76,.06),transparent 60%);pointer-events:none}
+.rank-b{position:absolute;top:13px;right:13px;width:33px;height:33px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;border:1.5px solid}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:6px;font-size:9px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;font-family:'Outfit',sans-serif}
+.t-cashback{background:rgba(0,212,170,.1);color:var(--teal2);border:1px solid rgba(0,212,170,.2)}
+.t-refer{background:rgba(56,189,248,.1);color:var(--sky);border:1px solid rgba(56,189,248,.2)}
+.t-ai{background:rgba(139,92,246,.1);color:#c4b5fd;border:1px solid rgba(139,92,246,.2)}
+.t-freelance{background:rgba(201,168,76,.1);color:var(--gold2);border:1px solid rgba(201,168,76,.2)}
+.t-survey{background:rgba(255,77,109,.1);color:#ff8fab;border:1px solid rgba(255,77,109,.2)}
+.t-crypto{background:rgba(251,191,36,.1);color:#fde68a;border:1px solid rgba(251,191,36,.2)}
+.t-invest{background:rgba(52,211,153,.1);color:#6ee7b7;border:1px solid rgba(52,211,153,.2)}
+.t-app{background:rgba(167,139,250,.1);color:#ddd6fe;border:1px solid rgba(167,139,250,.2)}
+.ef-1{color:#00d4aa}.ef-2{color:#f59e0b}.ef-3{color:#ef4444}
+.tbar{height:3px;border-radius:9px;background:rgba(255,255,255,.06);overflow:hidden}
+.tfill{height:100%;border-radius:9px;transition:width .7s ease}
+.score-chip{font-family:'Playfair Display',serif;font-weight:700;font-size:11px;padding:3px 9px;border-radius:7px;border:1px solid}
+.view-btn{padding:7px 14px;border-radius:9px;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;letter-spacing:.3px;background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(240,204,106,.05));border:1px solid rgba(201,168,76,.28);color:var(--gold2);cursor:pointer;transition:all .2s;white-space:nowrap}
+.view-btn:hover{background:linear-gradient(135deg,rgba(201,168,76,.22),rgba(240,204,106,.1));border-color:rgba(201,168,76,.6);box-shadow:0 0 18px rgba(201,168,76,.13)}
+.show-more-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:320px;margin:0 auto;padding:13px 26px;border-radius:14px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;letter-spacing:.4px;background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(0,212,170,.04));border:1px solid rgba(201,168,76,.22);color:var(--gold2);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.show-more-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.14),rgba(0,212,170,.07));opacity:0;transition:opacity .3s}
+.show-more-btn:hover::before{opacity:1}
+.show-more-btn:hover{border-color:rgba(201,168,76,.48);box-shadow:0 8px 32px rgba(201,168,76,.1),0 0 0 1px rgba(201,168,76,.08);transform:translateY(-2px)}
+.ref-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(0,212,170,.05));border:1px solid rgba(201,168,76,.22);color:var(--gold2);cursor:pointer;transition:all .2s}
+.ref-btn:hover{border-color:rgba(201,168,76,.48);box-shadow:0 0 18px rgba(201,168,76,.1)}
+.ref-btn.spin svg{animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.skel{background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:shim 1.6s infinite;border-radius:10px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.m-ovl{position:fixed;inset:0;background:rgba(2,4,8,.87);backdrop-filter:blur(14px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:16px}
+.m-ovl.open{opacity:1;pointer-events:all}
+.m-box{background:var(--card);border:1px solid rgba(201,168,76,.18);border-radius:22px;padding:26px;max-width:490px;width:100%;transform:scale(.95) translateY(20px);transition:all .3s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto;position:relative}
+.m-ovl.open .m-box{transform:scale(1) translateY(0)}
+.m-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:22px 22px 0 0;background:linear-gradient(90deg,transparent,var(--gold),var(--teal2),transparent)}
+.tick-outer{overflow:hidden;white-space:nowrap}
+.tick-inner{display:inline-block;animation:tick 42s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#00d4aa;animation:lp 2s ease-in-out infinite}
+@keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+@keyframes cUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+.cu{animation:cUp .44s ease both}
+.gold-line{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.25),transparent)}
+.best-badge{font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;padding:2px 7px;border-radius:5px;font-family:'Outfit',sans-serif}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:var(--rim2);border-radius:4px}
+@media(max-width:640px){.srch{width:140px}.srch:focus{width:160px}.stat-val{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<div class="amb amb-1"></div><div class="amb amb-2"></div><div class="amb amb-3"></div>
+<div class="gridbg"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-[56px] flex items-center justify-between gap-4">
+    <div class="flex items-center gap-2.5 shrink-0">
+      <div class="relative w-8 h-8">
+        <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:linear-gradient(135deg,#c9a84c,#00d4aa)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="absolute -top-1 -right-1 live-dot"></div>
+      </div>
+      <div>
+        <div class="logo-txt leading-none">AutoEarn AI</div>
+        <div class="logo-badge mt-0.5 inline-block">INTELLIGENCE</div>
+      </div>
+    </div>
+    <div id="fbar" class="hidden sm:flex items-center gap-1.5 overflow-x-auto">
+      <button class="fpill act" data-f="all">✦ All Offers</button>
+      <button class="fpill" data-f="india">🇮🇳 India</button>
+      <button class="fpill" data-f="global">🌐 Global</button>
+      <button class="fpill" data-f="instant">⚡ Instant</button>
+      <button class="fpill" data-f="highpay">💎 High Pay</button>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <div class="srch-wrap hidden sm:block">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="srch" class="srch" placeholder="Search offers…" type="text"/>
+      </div>
+      <button id="refBtn" class="ref-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        <span class="hidden sm:inline">Refresh AI</span>
+      </button>
+    </div>
+  </div>
+  <div id="mfbar" class="sm:hidden flex gap-2 px-4 pb-2.5 overflow-x-auto">
+    <button class="fpill act" data-f="all">All</button>
+    <button class="fpill" data-f="india">🇮🇳 India</button>
+    <button class="fpill" data-f="global">🌐 Global</button>
+    <button class="fpill" data-f="instant">⚡ Instant</button>
+    <button class="fpill" data-f="highpay">💎 High Pay</button>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="tick-outer py-1.5" style="background:rgba(8,12,18,.7);border-bottom:1px solid rgba(201,168,76,.07)">
+  <div class="tick-inner text-xs font-medium px-8" style="color:var(--sub)">
+    ✦ PhonePe ₹150 Cashback &nbsp;•&nbsp; 🤖 GPT Prompt Pack $89 &nbsp;•&nbsp; 💳 CRED Gems ₹500 &nbsp;•&nbsp; ⚡ Coinbase Learn $30 &nbsp;•&nbsp; 🪙 Binance Referral $200 &nbsp;•&nbsp; 🌐 Fiverr AI Gig $150 &nbsp;•&nbsp; 📈 Groww SIP ₹250 &nbsp;•&nbsp; 🔥 Upwork Writing $400 &nbsp;•&nbsp; 🛍 Meesho Seller ₹2000 &nbsp;•&nbsp; 💡 Notion Templates $200 &nbsp;•&nbsp; 🎓 Udemy Course $1000 &nbsp;•&nbsp; 🏪 Etsy Digital Shop $800 &nbsp;•&nbsp;
+    ✦ PhonePe ₹150 Cashback &nbsp;•&nbsp; 🤖 GPT Prompt Pack $89 &nbsp;•&nbsp; 💳 CRED Gems ₹500 &nbsp;•&nbsp; ⚡ Coinbase Learn $30 &nbsp;•&nbsp; 🪙 Binance Referral $200 &nbsp;•&nbsp; 🌐 Fiverr AI Gig $150 &nbsp;•&nbsp; 📈 Groww SIP ₹250 &nbsp;•&nbsp; 🔥 Upwork Writing $400 &nbsp;•&nbsp; 🛍 Meesho Seller ₹2000 &nbsp;•&nbsp; 💡 Notion Templates $200 &nbsp;•&nbsp; 🎓 Udemy Course $1000 &nbsp;•&nbsp; 🏪 Etsy Digital Shop $800 &nbsp;•&nbsp;
+  </div>
+</div>
+
+<!-- HERO STRIP -->
+<div class="hero-strip py-6 px-4 sm:px-6 relative z-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold leading-tight" style="font-family:'Playfair Display',serif">
+          Intelligence-Ranked <span style="background:linear-gradient(135deg,var(--gold2),var(--teal2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Earn Opportunities</span>
+        </h1>
+        <p class="text-sm mt-1" style="color:var(--sub)">100 AI-scored offers. Highest ROI, lowest effort — refreshed and ranked for you in real-time.</p>
+      </div>
+    </div>
+    <div class="sm:hidden mb-3 srch-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="srchM" class="srch" style="width:100%" placeholder="Search 100 offers…" type="text"/>
+    </div>
+    <div class="flex gap-3 overflow-x-auto pb-1">
+      <div class="stat-card shrink-0"><div class="text-xs mb-1.5 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">Total Offers</div><div class="stat-val" style="color:var(--gold2)" id="stTotal">—</div></div>
+      <div class="stat-card shrink-0"><div class="text-xs mb-1.5 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">Avg Reward</div><div class="stat-val" style="color:var(--teal2)" id="stAvg">—</div></div>
+      <div class="stat-card shrink-0"><div class="text-xs mb-1.5 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">AI Peak Score</div><div class="stat-val" style="color:var(--gold3)" id="stPeak">—</div></div>
+      <div class="stat-card shrink-0"><div class="text-xs mb-1.5 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">India Offers</div><div class="stat-val" style="color:var(--sky)" id="stIndia">—</div></div>
+      <div class="stat-card shrink-0"><div class="text-xs mb-1.5 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">Updated</div><div class="font-bold text-base" style="font-family:'Playfair Display',serif" id="stTime">—</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEED -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 relative z-10 space-y-14" id="feed"></main>
+
+<!-- MODAL -->
+<div class="m-ovl" id="mOvl">
+  <div class="m-box">
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex-1 pr-4">
+        <div id="mTag" class="mb-2 flex items-center gap-2 flex-wrap"></div>
+        <h2 id="mTitle" class="text-xl font-bold leading-tight" style="font-family:'Playfair Display',serif"></h2>
+        <div class="text-xs mt-1" style="color:var(--sub)" id="mSrc"></div>
+      </div>
+      <button onclick="closeM()" class="rounded-xl p-2 hover:bg-white/5 transition" style="color:var(--sub)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <p id="mDesc" class="text-sm leading-relaxed mb-5" style="color:var(--sub)"></p>
+    <div class="grid grid-cols-2 gap-3 mb-5">
+      <div class="rounded-[13px] p-4" style="background:rgba(255,255,255,.03);border:1px solid var(--rim)"><div class="text-xs mb-1 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">Reward</div><div id="mReward" class="text-xl font-bold" style="font-family:'Playfair Display',serif;color:var(--teal2)"></div></div>
+      <div class="rounded-[13px] p-4" style="background:rgba(255,255,255,.03);border:1px solid var(--rim)"><div class="text-xs mb-1 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">Effort</div><div id="mEffort" class="text-base font-bold" style="font-family:'Playfair Display',serif"></div></div>
+      <div class="rounded-[13px] p-4" style="background:rgba(255,255,255,.03);border:1px solid var(--rim)"><div class="text-xs mb-1 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">AI Score</div><div id="mScore" class="text-xl font-bold" style="font-family:'Playfair Display',serif;color:var(--gold2)"></div></div>
+      <div class="rounded-[13px] p-4" style="background:rgba(255,255,255,.03);border:1px solid var(--rim)"><div class="text-xs mb-1 font-semibold tracking-widest uppercase" style="color:var(--sub);font-size:9px">Region</div><div id="mRegion" class="text-base font-semibold" style="color:var(--text)"></div></div>
+    </div>
+    <div class="mb-5">
+      <div class="flex justify-between text-xs mb-2" style="color:var(--sub)"><span class="font-semibold tracking-widest uppercase" style="font-size:9px">Trust Level</span><span id="mTrustPct" class="font-bold"></span></div>
+      <div class="tbar"><div id="mTrustFill" class="tfill"></div></div>
+    </div>
+    <!-- Direct Link Badge -->
+    <div id="mDirectWrap" class="flex items-center gap-2 mb-4 p-3 rounded-[11px]" style="background:rgba(0,212,170,.06);border:1px solid rgba(0,212,170,.18)">
+      <span class="text-xs font-bold px-2 py-1 rounded-md" style="background:rgba(0,212,170,.15);color:var(--teal2);letter-spacing:.5px">⚡ DIRECT LINK</span>
+      <span id="mDirectUrl" class="text-xs truncate" style="color:var(--sub)"></span>
+    </div>
+    <!-- How to Claim -->
+    <div class="mb-5">
+      <div class="text-xs font-bold tracking-widest uppercase mb-3" style="color:var(--gold2);font-size:9px;letter-spacing:1.5px">✦ How to Claim</div>
+      <ol id="mSteps" class="space-y-2"></ol>
+    </div>
+    <a id="mLink" href="#" target="_blank" rel="noopener" class="block w-full text-center py-3.5 rounded-[13px] font-bold text-sm tracking-wide" style="font-family:'Outfit',sans-serif;font-weight:800;background:linear-gradient(135deg,#c9a84c,#00d4aa);color:#000;letter-spacing:.5px">→ Go to Offer Page</a>
+    <p class="text-center text-xs mt-3" style="color:var(--dim)">Always verify terms on the official platform.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="relative z-10 mt-12 py-8" style="border-top:1px solid var(--rim)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+    <div class="logo-txt text-lg mb-1">AutoEarn AI</div>
+    <p class="text-xs" style="color:var(--dim)">Powered by proprietary AI scoring engine • Not financial advice • For educational & research purposes only</p>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   100-OFFER DATABASE
+══════════════════════════════════════════════════════ */
+const DB=[
+  // INDIA — CASHBACK & PAYMENTS (8)
+  {id:1,  title:"PhonePe SuperCash Cashback",      desc:"Get instant cashback on first 5 UPI transactions, recharges and bill payments. Credited within 24 hrs.",           reward:150,  cur:"₹",ef:1,tag:"cashback",region:"india", type:"instant", src:"PhonePe",         trust:.92,fresh:1.0, link:"https://www.phonepe.com/app/cashback-offers",deepLabel:"phonepe.com/app/cashback-offers",howTo:["Download PhonePe app or open it","Go to Offers section on the home screen","Select SuperCash Cashback offer and tap 'Activate'","Make any UPI payment, recharge or bill payment","Cashback credited to your PhonePe wallet within 24 hrs"]},
+  {id:2,  title:"Google Pay Scratch Cards",         desc:"Every UPI transaction on GPay gives a scratch card. Rewards range ₹1–₹1 lakh. High-frequency users win more.",   reward:100,  cur:"₹",ef:1,tag:"cashback",region:"india", type:"instant", src:"Google Pay",      trust:.94,fresh:.97, link:"https://pay.google.com/intl/en_in/about/",deepLabel:"pay.google.com/intl/en_in/about",howTo:["Download Google Pay app","Complete UPI registration with your bank account","Send money or pay a bill to earn a scratch card","Tap the scratch card in the Rewards section","Winnings credited instantly to your bank account"]},
+  {id:3,  title:"Paytm Cashback Mall",             desc:"Shop through Paytm's cashback mall and earn up to 20% cashback on 500+ brands including Flipkart and Myntra.",     reward:300,  cur:"₹",ef:1,tag:"cashback",region:"india", type:"instant", src:"Paytm",           trust:.88,fresh:.90, link:"https://paytm.com/cashback-offers",deepLabel:"paytm.com/cashback-offers",howTo:["Open Paytm app and tap 'Cashback Offers'","Browse brands in the Cashback Mall","Tap the offer you want and click 'Shop Now'","Complete purchase through the Paytm link","Cashback appears in your Paytm wallet within 48–72 hrs"]},
+  {id:4,  title:"Amazon Pay ICICI Credit Card",    desc:"5% cashback on Amazon, 2% on partner merchants, 1% elsewhere. No annual fee. Best card for Amazon shoppers.",      reward:500,  cur:"₹",ef:2,tag:"cashback",region:"india", type:"trending",src:"Amazon Pay",      trust:.96,fresh:.88, link:"https://www.amazon.in/amazonpay/icici-credit-card",deepLabel:"amazon.in/amazonpay/icici-credit-card",howTo:["Visit the Amazon Pay ICICI card page","Click 'Apply Now' and complete KYC online","Receive card in 7–10 working days","Activate the card on Amazon or ICICI app","Start earning 5% cashback on every Amazon purchase"]},
+  {id:5,  title:"CRED Gems Rewards",               desc:"Pay credit card bills on CRED and earn gems. Redeem for exclusive vouchers and luxury experiences at 70% off.",     reward:500,  cur:"₹",ef:1,tag:"cashback",region:"india", type:"highpay", src:"CRED",            trust:.90,fresh:.85, link:"https://cred.club/",deepLabel:"cred.club",howTo:["Download CRED app and register with your mobile","Link your credit cards (any bank supported)","Pay your credit card bills through CRED","Earn CRED Gems on every payment","Redeem Gems in the CRED store for vouchers and experiences"]},
+  {id:6,  title:"Mobikwik SuperCash Boost",        desc:"Add money via UPI and get 10% SuperCash instantly. Use for recharges and bill payments every month.",               reward:200,  cur:"₹",ef:1,tag:"cashback",region:"india", type:"instant", src:"Mobikwik",        trust:.82,fresh:.88, link:"https://www.mobikwik.com/",deepLabel:"mobikwik.com",howTo:["Download MobiKwik app and create an account","Go to 'Add Money' and choose UPI option","Add a minimum of ₹100 to your wallet","SuperCash is credited instantly to your wallet","Use SuperCash for mobile recharges or bill payments"]},
+  {id:7,  title:"Axis Flipkart Credit Card",       desc:"5% unlimited cashback on Flipkart, 4% on preferred merchants. ₹500 gift voucher on Big Billion Day join.",         reward:600,  cur:"₹",ef:2,tag:"cashback",region:"india", type:"highpay", src:"Axis Bank",       trust:.91,fresh:.82, link:"https://www.axisbank.com/retail/cards/credit-card/flipkart-axis-bank-credit-card",deepLabel:"axisbank.com/flipkart-axis-credit-card",howTo:["Visit Axis Bank Flipkart credit card page","Click 'Apply Now' and fill in personal & financial details","Upload KYC documents (PAN, Aadhaar)","Card delivered to your address in 7–15 days","Activate on Axis app and start earning 5% cashback on Flipkart"]},
+  {id:8,  title:"SBI SimplyCLICK Card",            desc:"10x rewards on Amazon, BookMyShow, Cleartrip. Annual fee waived on ₹1L spend. Perfect for digital-first users.",   reward:400,  cur:"₹",ef:2,tag:"cashback",region:"india", type:"trending",src:"SBI Card",        trust:.93,fresh:.80, link:"https://www.sbicard.com/en/personal/credit-cards/rewards/simplyclick-sbi-card.page",deepLabel:"sbicard.com/simplyclick-sbi-card",howTo:["Visit SBI Card SimplyCLICK page","Click 'Apply Now' — use net banking for instant approval if existing SBI customer","Submit documents and complete e-KYC","Card arrives in 7–10 working days","Earn 10x reward points on Amazon and BookMyShow from day one"]},
+  // INDIA — REFERRAL (9)
+  {id:9,  title:"Zepto Grocery Referral",          desc:"Refer friends and earn ₹120 per first order. Chain 10 referrals for ₹1200 in a weekend. No cap on earnings.",      reward:120,  cur:"₹",ef:1,tag:"refer",   region:"india", type:"instant", src:"Zepto",           trust:.88,fresh:.97, link:"https://www.zepto.com/",deepLabel:"zepto.com",howTo:["Open Zepto app and go to 'Refer & Earn'","Copy your unique referral link","Share with friends via WhatsApp or social media","Friend places their first Zepto order","₹120 cashback credited to your Zepto wallet instantly"]},
+  {id:10, title:"Swiggy One Referral Bonus",       desc:"Share Swiggy referral link. Both get 30 days Swiggy One free worth ₹299. Unlimited referrals allowed.",             reward:299,  cur:"₹",ef:1,tag:"refer",   region:"india", type:"instant", src:"Swiggy",          trust:.86,fresh:.95, link:"https://www.swiggy.com/",deepLabel:"swiggy.com",howTo:["Open Swiggy app and tap 'Refer & Earn' in the menu","Tap 'Share Your Code' to copy your referral code","Send code to friends via WhatsApp, SMS or Instagram","Friend downloads Swiggy and enters your code","Both of you receive 30 days of Swiggy One membership free"]},
+  {id:11, title:"Zomato Gold Referral",            desc:"Refer to Gold subscription. Earn ₹100 wallet credit per activation. BOGO at 1000+ restaurants for both users.",     reward:100,  cur:"₹",ef:1,tag:"refer",   region:"india", type:"instant", src:"Zomato",          trust:.87,fresh:.93, link:"https://www.zomato.com/gold",deepLabel:"zomato.com/gold",howTo:["Open Zomato app and go to Zomato Gold section","Tap 'Invite Friends' and copy your referral link","Share with friends via WhatsApp or social media","Friend subscribes to Zomato Gold using your link","You earn ₹100 wallet credit after their first month"]},
+  {id:12, title:"Navi Loan Referral",              desc:"Earn ₹800 flat per successful personal loan disbursal. One active network = consistent passive income stream.",       reward:800,  cur:"₹",ef:2,tag:"refer",   region:"india", type:"highpay", src:"Navi Finance",    trust:.82,fresh:.80, link:"https://navi.com/",deepLabel:"navi.com",howTo:["Download Navi app and register your account","Go to 'Refer & Earn' in the app menu","Share your referral link with friends needing a personal loan","Friend applies for a Navi loan using your link","Earn ₹800 once their loan is successfully disbursed"]},
+  {id:13, title:"Groww Referral Bonus",            desc:"Refer friends and earn ₹100 on KYC + investment. Extra ₹150 if they start SIP within 7 days of joining.",           reward:250,  cur:"₹",ef:1,tag:"refer",   region:"india", type:"instant", src:"Groww",           trust:.91,fresh:.88, link:"https://groww.in/refer",deepLabel:"groww.in/refer",howTo:["Open Groww app and tap 'Refer & Earn'","Copy your unique referral link","Share with friends and family","Friend signs up and completes KYC via your link","You earn ₹100 instantly; ₹150 more if they start a SIP within 7 days"]},
+  {id:14, title:"Upstox Referral Bonus",           desc:"Earn ₹300 per friend who opens a demat account. They get ₹100 + free stocks. Great for finance communities.",       reward:300,  cur:"₹",ef:2,tag:"refer",   region:"india", type:"trending",src:"Upstox",          trust:.93,fresh:.87, link:"https://upstox.com/referral/",deepLabel:"upstox.com/referral",howTo:["Log into Upstox app and go to 'Refer & Earn'","Copy your personal referral link","Share with friends interested in stock trading","Friend opens a demat account using your link","You get ₹300 once their account is verified and active"]},
+  {id:15, title:"Ola Cab Referral",                desc:"Share Ola referral code and earn ₹50 per friend's first ride. High-volume potential in college or office groups.",    reward:50,   cur:"₹",ef:1,tag:"refer",   region:"india", type:"instant", src:"Ola",             trust:.84,fresh:.80, link:"https://www.olacabs.com/",deepLabel:"olacabs.com",howTo:["Open the Ola app and tap 'Refer & Earn'","Copy your referral code","Share with friends via WhatsApp groups or SMS","Friend downloads Ola and enters your referral code","You earn ₹50 credit after their first completed ride"]},
+  {id:16, title:"CRED Referral Coins",             desc:"Refer card holders to CRED. Earn coins worth ₹200 per join + bill payment. Invitee also gets a welcome bonus.",      reward:200,  cur:"₹",ef:1,tag:"refer",   region:"india", type:"instant", src:"CRED",            trust:.89,fresh:.85, link:"https://cred.club/",deepLabel:"cred.club",howTo:["Open CRED app and go to 'Refer & Earn' in profile","Copy your referral link or code","Share with friends who have a credit card","Friend downloads CRED and registers with your code","Earn coins worth ₹200 once they pay their first bill"]},
+  {id:17, title:"Fi Money Savings Referral",       desc:"Refer friends to Fi Money zero-balance account. Both get ₹100 cashback on first spends. High-trust neobank.",        reward:100,  cur:"₹",ef:1,tag:"refer",   region:"india", type:"instant", src:"Fi Money",        trust:.90,fresh:.88, link:"https://fi.money/",deepLabel:"fi.money",howTo:["Open Fi app and tap 'Refer' in the menu","Share your referral link via WhatsApp or Instagram","Friend downloads Fi and opens an account using your link","Both of you make your first transaction","₹100 cashback credited to both accounts within 24 hrs"]},
+  // INDIA — INVEST & BANKING (6)
+  {id:18, title:"Groww Mutual Fund SIP",           desc:"Start SIP of ₹500/month and get ₹250 cashback + scratch card. Builds wealth while giving a one-time bonus.",        reward:250,  cur:"₹",ef:2,tag:"invest",  region:"india", type:"trending",src:"Groww",           trust:.93,fresh:.88, link:"https://groww.in/mutual-funds",deepLabel:"groww.in/mutual-funds",howTo:["Open Groww app and tap 'Mutual Funds'","Browse funds and tap 'Start SIP'","Choose a minimum ₹500/month SIP amount","Complete KYC if not done (takes 5 min)","First SIP debit triggers ₹250 cashback + scratch card within 72 hrs"]},
+  {id:19, title:"Zerodha Account Opening",         desc:"Open demat account and get 3 months free Kite + exclusive trading courses worth ₹4000 absolutely free.",             reward:4000, cur:"₹",ef:2,tag:"invest",  region:"india", type:"highpay", src:"Zerodha",         trust:.95,fresh:.85, link:"https://zerodha.com/open-account",deepLabel:"zerodha.com/open-account",howTo:["Visit zerodha.com/open-account","Fill in your PAN and Aadhaar details","Complete e-KYC via DigiLocker or video verification","Fund your account with any amount","Get 3 months of Kite Connect + trading courses unlocked automatically"]},
+  {id:20, title:"INDmoney US Stocks Platform",     desc:"Invest in US stocks and get free fractional FAANG shares worth ₹500. Zero commission on first 5 trades.",            reward:500,  cur:"₹",ef:2,tag:"invest",  region:"india", type:"highpay", src:"INDmoney",        trust:.88,fresh:.82, link:"https://www.indmoney.com/",deepLabel:"indmoney.com",howTo:["Download INDmoney app and sign up","Complete KYC with PAN and Aadhaar","Open a US stocks account (takes 2–3 days)","Make your first investment in any US stock","Receive free fractional FAANG share worth ₹500 within 7 days"]},
+  {id:21, title:"Smallcase Portfolio Starter",     desc:"Subscribe to a Smallcase portfolio and get ₹300 cashback + 1 month premium research access free.",                   reward:300,  cur:"₹",ef:2,tag:"invest",  region:"india", type:"trending",src:"Smallcase",       trust:.87,fresh:.80, link:"https://www.smallcase.com/",deepLabel:"smallcase.com",howTo:["Open Smallcase app and browse portfolios","Choose a portfolio matching your risk appetite","Invest a minimum amount (usually ₹5000+)","Get ₹300 cashback credited within 48 hrs","1 month of Smallcase Premium research access unlocked automatically"]},
+  {id:22, title:"Angel One Demat Bonus",           desc:"Open Angel One account and get ₹200 cashback + 30 days Pro research free. Trusted by 1 crore+ traders in India.",   reward:200,  cur:"₹",ef:2,tag:"invest",  region:"india", type:"trending",src:"Angel One",       trust:.89,fresh:.82, link:"https://www.angelone.in/open-demat-account",deepLabel:"angelone.in/open-demat-account",howTo:["Visit angelone.in/open-demat-account","Enter mobile number and verify OTP","Fill personal and bank account details","Upload PAN and Aadhaar for e-KYC","Account opens in 24 hrs; ₹200 cashback and Pro research credited automatically"]},
+  {id:23, title:"Coin by Zerodha Mutual Funds",    desc:"Invest in direct mutual funds with zero commission. Get ₹100 Amazon voucher on first SIP. SEBI-regulated platform.", reward:100,  cur:"₹",ef:2,tag:"invest",  region:"india", type:"instant", src:"Coin/Zerodha",    trust:.94,fresh:.83, link:"https://coin.zerodha.com/",deepLabel:"coin.zerodha.com",howTo:["Log into your Zerodha account","Visit coin.zerodha.com or open Coin in the Kite app","Search for a mutual fund and tap 'Invest'","Set up a SIP for any amount starting ₹100","₹100 Amazon voucher emailed within 7 working days of first investment"]},
+  // INDIA — FREELANCE & GIGS (6)
+  {id:24, title:"Meesho Reseller Program",         desc:"Resell products on WhatsApp with zero investment. Earn ₹200–₹2000 margin per order. AI suggests top SKUs.",          reward:2000, cur:"₹",ef:3,tag:"freelance",region:"india",type:"highpay", src:"Meesho",          trust:.80,fresh:.75, link:"https://supplier.meesho.com/",deepLabel:"supplier.meesho.com",howTo:["Download Meesho app and register as a reseller","Browse products and share to your WhatsApp contacts","When someone orders, add your profit margin","Place order on Meesho with customer's address","Meesho ships directly; you keep the margin"]},
+  {id:25, title:"Chegg India Online Tutoring",     desc:"Tutor Math, Science, English for US/UK students. Earn ₹500–₹3000/hour. Work from home flexible hours.",              reward:3000, cur:"₹",ef:3,tag:"freelance",region:"india",type:"highpay", src:"Chegg",           trust:.85,fresh:.78, link:"https://www.chegg.com/tutors/become-a-tutor/",deepLabel:"chegg.com/tutors/become-a-tutor",howTo:["Go to chegg.com/tutors/become-a-tutor","Complete the subject expertise test","Upload proof of qualifications (degree/marksheet)","Set your availability schedule","Accept session requests and earn per hour taught"]},
+  {id:26, title:"Vedantu LIVE Teaching",           desc:"Teach CBSE/JEE/NEET online. Earn ₹200–₹500/hour. Weekend teaching possible. 10,000+ teachers earning extra.",        reward:2000, cur:"₹",ef:3,tag:"freelance",region:"india",type:"highpay", src:"Vedantu",         trust:.86,fresh:.77, link:"https://www.vedantu.com/teach-online",deepLabel:"vedantu.com/teach-online",howTo:["Visit vedantu.com/teach-online and apply","Fill in your educational background and subject expertise","Clear a demo session with Vedantu's academic team","Set your available slots in the teacher dashboard","Start taking live sessions and earn per class"]},
+  {id:27, title:"Urban Company Service Pro",       desc:"Register as service partner. Earn ₹800–₹5000 per service. Free training and certification by Urban Company.",         reward:5000, cur:"₹",ef:3,tag:"freelance",region:"india",type:"highpay", src:"Urban Company",   trust:.88,fresh:.82, link:"https://www.urbancompany.com/professional",deepLabel:"urbancompany.com/professional",howTo:["Visit urbancompany.com/professional on mobile","Select your service category (electrician, beautician, etc.)","Complete free training and get Urban Company certified","Download the pro app and go online","Accept bookings in your area and earn per job"]},
+  {id:28, title:"Swiggy/Zomato Delivery",          desc:"Deliver on Swiggy Genie or Zomato instant. Earn ₹800–₹1200/day with incentives. Flexible 4-hour shifts.",            reward:1200, cur:"₹",ef:2,tag:"freelance",region:"india",type:"trending",src:"Swiggy/Zomato",   trust:.87,fresh:.85, link:"https://partner.swiggy.com/",deepLabel:"partner.swiggy.com",howTo:["Visit partner.swiggy.com and click 'Join as Delivery Partner'","Upload Aadhaar, PAN and driving license","Complete background verification (2–3 days)","Attend onboarding session and collect delivery bag","Start delivering and earn ₹800–₹1200/day with peak incentives"]},
+  {id:29, title:"Freelancer India AI Projects",   desc:"Win AI annotation, prompt writing, chatbot testing projects. Earn ₹1500–₹8000/project. High demand skill.",           reward:5000, cur:"₹",ef:2,tag:"ai",      region:"india", type:"ai-picks",src:"Freelancer.com",  trust:.84,fresh:.90, link:"https://www.freelancer.in/jobs/artificial-intelligence/",deepLabel:"freelancer.in/jobs/artificial-intelligence",howTo:["Create a free account on freelancer.in","Build your profile highlighting AI/ML skills","Browse AI category jobs and place competitive bids","Complete a small test project to build reviews","Scale to ₹5000–₹8000 projects as your rating grows"]},
+  // INDIA — APP & SURVEY (8)
+  {id:30, title:"TaskBucks Earn Tasks",            desc:"Complete app tasks on TaskBucks — install apps, watch ads, surveys. Instant Paytm cashout. Student-friendly.",         reward:500,  cur:"₹",ef:1,tag:"app",     region:"india", type:"instant", src:"TaskBucks",       trust:.72,fresh:.88, link:"https://www.taskbucks.com/",deepLabel:"taskbucks.com",howTo:["Download TaskBucks from the Play Store","Register with your mobile number","Browse available tasks (installs, surveys, videos)","Complete tasks and earn coins","Redeem coins for Paytm cash when you hit ₹10 threshold"]},
+  {id:31, title:"Rozdhan News Reading",            desc:"Read news, watch videos, play quizzes on Rozdhan. Earn ₹50–₹150/day. ₹10 per friend. Daily UPI withdrawal.",          reward:150,  cur:"₹",ef:1,tag:"app",     region:"india", type:"instant", src:"Rozdhan",         trust:.70,fresh:.85, link:"https://rozdhan.com/",deepLabel:"rozdhan.com",howTo:["Download Rozdhan app from Play Store","Sign up with your phone number","Read news, watch videos and answer daily quizzes","Earn coins for every activity completed","Withdraw via UPI once you reach the ₹50 minimum"]},
+  {id:32, title:"WinZO Skill Games",               desc:"Play skill-based card, trivia and arcade games. Win cash prizes from ₹1 entry. Top players earn ₹10,000+/month.",     reward:10000,cur:"₹",ef:2,tag:"app",     region:"india", type:"highpay", src:"WinZO",           trust:.75,fresh:.88, link:"https://www.winzogames.com/",deepLabel:"winzogames.com",howTo:["Download WinZO from their website (not Play Store)","Register and complete mobile verification","Add money to your WinZO wallet (min ₹50)","Join skill game tournaments in your preferred game","Winnings credited to wallet; withdraw via UPI or Paytm"]},
+  {id:33, title:"Toluna India Surveys",            desc:"Join Toluna's India panel. Take brand surveys, earn 3000–15000 points. Redeem for Amazon vouchers or bank transfer.",  reward:400,  cur:"₹",ef:1,tag:"survey",  region:"india", type:"instant", src:"Toluna",          trust:.79,fresh:.83, link:"https://in.toluna.com/",deepLabel:"in.toluna.com",howTo:["Register at in.toluna.com with email","Complete your profile to qualify for more surveys","Check inbox daily for survey invitations","Complete surveys (5–20 minutes each)","Redeem points for Amazon vouchers or direct bank transfer"]},
+  {id:34, title:"YouGov India Opinion",            desc:"Share opinions on brands, politics, culture. Earn redeemable points used by Fortune 500 research teams worldwide.",     reward:250,  cur:"₹",ef:1,tag:"survey",  region:"india", type:"instant", src:"YouGov",          trust:.84,fresh:.82, link:"https://india.yougov.com/",deepLabel:"india.yougov.com",howTo:["Sign up at india.yougov.com","Complete your profile survey (takes 5 minutes)","Receive weekly survey invitations by email","Complete surveys to earn YouGov points","Redeem points for gift vouchers or donate to charity"]},
+  {id:35, title:"Swagbucks India",                 desc:"Complete surveys, watch videos, shop through Swagbucks. Convert SB points to PayPal or Amazon GCs. 10M+ members.",     reward:300,  cur:"₹",ef:1,tag:"survey",  region:"india", type:"instant", src:"Swagbucks",       trust:.81,fresh:.85, link:"https://www.swagbucks.com/",deepLabel:"swagbucks.com",howTo:["Sign up free at swagbucks.com","Complete profile surveys for a quick SB bonus","Earn SB by watching videos, taking surveys, or shopping","Check the daily 'To-Do List' for bonus SB activities","Redeem SB for PayPal cash or Amazon gift cards"]},
+  {id:36, title:"Appen AI Data Annotation",        desc:"Annotate text, images, audio for AI training via Appen. Work 2–4 hrs/day. Earn ₹800–₹2500/day on projects.",         reward:2500, cur:"₹",ef:2,tag:"ai",      region:"india", type:"ai-picks",src:"Appen",           trust:.83,fresh:.88, link:"https://connect.appen.com/",deepLabel:"connect.appen.com",howTo:["Register at connect.appen.com","Complete your skills and language assessments","Browse available AI annotation projects","Apply to projects matching your skills","Complete tasks daily and get paid monthly via PayPal"]},
+  {id:37, title:"Scale AI Tasker India",           desc:"Evaluate AI model outputs on Scale AI. Earn $8–$25/hr in USD. Indian residents eligible. Best for tech-savvy users.",  reward:2000, cur:"₹",ef:2,tag:"ai",      region:"india", type:"ai-picks",src:"Scale AI",         trust:.89,fresh:.92, link:"https://scale.com/taskers",deepLabel:"scale.com/taskers",howTo:["Apply at scale.com/taskers","Complete the qualification assessments for your chosen category","Pass with 90%+ accuracy to unlock paid tasks","Complete AI evaluation tasks in your dashboard","Earn in USD; payments made weekly via Stripe"]},
+  // GLOBAL — FREELANCE (14)
+  {id:38, title:"Fiverr AI Logo Design Gig",       desc:"Use Midjourney + Canva to create logos. Charge $30–$150 per design. 2-hour delivery. Top sellers earn $3000+/month.", reward:150,  cur:"$",ef:2,tag:"freelance",region:"global",type:"highpay", src:"Fiverr",          trust:.90,fresh:.95, link:"https://www.fiverr.com/",deepLabel:"fiverr.com",howTo:["Create a free Fiverr seller account","Set up a Logo Design gig with AI-powered portfolio samples","Price your gig starting at $30 for Basic package","Promote in Fiverr forums and social media to get first reviews","Deliver within 24 hrs using Midjourney + Canva to scale fast"]},
+  {id:39, title:"Upwork AI Content Writing",       desc:"Write SEO articles using Claude/GPT. Charge $30–$80 per article. Build recurring clients for $2000+/month income.",    reward:400,  cur:"$",ef:3,tag:"freelance",region:"global",type:"highpay", src:"Upwork",          trust:.88,fresh:.85, link:"https://www.upwork.com/",deepLabel:"upwork.com",howTo:["Create a detailed Upwork profile with writing samples","Set your hourly rate at $25–$50 to compete initially","Search for 'SEO writer' or 'AI content' jobs","Submit tailored proposals (not templates) for each job","Deliver quality content using AI assistance to build 5-star ratings"]},
+  {id:40, title:"Toptal Freelance Developer",      desc:"Pass Toptal screening and access top enterprise projects. Earn $80–$200/hr on long-term clients. Highly competitive.",   reward:200,  cur:"$",ef:3,tag:"freelance",region:"global",type:"highpay", src:"Toptal",          trust:.94,fresh:.80, link:"https://www.toptal.com/",deepLabel:"toptal.com",howTo:["Apply at toptal.com with your portfolio and CV","Pass the English communication screening call","Complete 1–3 technical interview rounds in your domain","Pass a live-coding or paid test project","Get matched with enterprise clients at $80–$200/hr once approved"]},
+  {id:41, title:"99designs Contest Prizes",        desc:"Enter design contests. Win $200–$1200 per logo or branding brief. AI tools give major speed and quality advantage.",     reward:500,  cur:"$",ef:2,tag:"freelance",region:"global",type:"trending",src:"99designs",       trust:.82,fresh:.83, link:"https://99designs.com/",deepLabel:"99designs.com",howTo:["Create a free designer account at 99designs.com","Browse open contests in Logo, Branding or Web Design","Submit multiple design variations using Midjourney + Canva","Engage with the client's feedback to improve placement","Win and receive full payment once client approves final design"]},
+  {id:42, title:"Guru.com Fixed Projects",         desc:"Bid on writing, coding, marketing projects. Average project $150–$800. Lower competition vs Upwork for newcomers.",     reward:300,  cur:"$",ef:2,tag:"freelance",region:"global",type:"trending",src:"Guru.com",        trust:.79,fresh:.78, link:"https://www.guru.com/",deepLabel:"guru.com",howTo:["Sign up as a freelancer at guru.com","Complete your skill profile and upload portfolio samples","Browse job listings filtered by your category","Submit a quote with a clear deliverable and timeline","Deliver the project and request 5-star feedback to build reputation"]},
+  {id:43, title:"PeoplePerHour Hourly",            desc:"Hired for social media, video editing, copywriting. Set your own rate. AI boosts your output 5x for the same effort.",  reward:250,  cur:"$",ef:2,tag:"freelance",region:"global",type:"trending",src:"PeoplePerHour",   trust:.80,fresh:.80, link:"https://www.peopleperhour.com/",deepLabel:"peopleperhour.com",howTo:["Create a PeoplePerHour freelancer account","Post a 'Houlie' (fixed-price service) or browse jobs","Set an hourly rate of $20–$50 to attract early clients","Respond quickly to messages to boost your response score","Use AI tools to deliver faster and take on more clients"]},
+  {id:44, title:"Contra Zero-Commission Platform", desc:"Keep 100% of earnings on Contra. Growing platform with quality tech, design and marketing clients. No fee.",            reward:200,  cur:"$",ef:2,tag:"freelance",region:"global",type:"trending",src:"Contra",          trust:.86,fresh:.88, link:"https://contra.com/",deepLabel:"contra.com",howTo:["Create a free independent profile at contra.com","Showcase your best projects with visual case studies","Set your services and pricing (keep 100%)","Get discovered by clients searching in your category","Receive payments directly — Contra takes zero commission"]},
+  {id:45, title:"Medium Partner Program",          desc:"Write articles on Medium, earn based on member reading time. Top writers earn $1000–$5000/month with AI assistance.",   reward:500,  cur:"$",ef:2,tag:"freelance",region:"global",type:"trending",src:"Medium",          trust:.82,fresh:.85, link:"https://medium.com/creator-center",deepLabel:"medium.com/creator-center",howTo:["Sign up at medium.com and create a writer profile","Apply to the Medium Partner Program (free, instant for most)","Publish 2–3 quality articles per week using AI drafting tools","Add relevant tags so articles get distributed to the right readers","Earnings deposited monthly via Stripe based on member read time"]},
+  {id:46, title:"Skillshare Royalty Payments",     desc:"Teach on Skillshare, earn monthly royalties by watch time. 500 students watching = $200–$500/month recurring income.",   reward:300,  cur:"$",ef:3,tag:"freelance",region:"global",type:"trending",src:"Skillshare",      trust:.82,fresh:.78, link:"https://www.skillshare.com/teach",deepLabel:"skillshare.com/teach",howTo:["Apply to teach at skillshare.com/teach","Record a course of 10+ short video lessons (5–15 min each)","Submit for Skillshare review (approval in 1–2 weeks)","Promote your class to drive initial enrollments","Earn monthly royalties based on total minutes watched by Premium members"]},
+  {id:47, title:"Coursera Teaching Assistant",     desc:"Become Coursera TA in your domain. Earn $15–$30/hr moderating forums and grading university-level assignments.",         reward:30,   cur:"$",ef:2,tag:"freelance",region:"global",type:"trending",src:"Coursera",        trust:.86,fresh:.77, link:"https://www.coursera.org/",deepLabel:"coursera.org",howTo:["Enroll and complete courses in your area of expertise on Coursera","Look for 'Community Mentor' or 'TA' postings in course discussion forums","Apply directly through the course instructor or partner university","If selected, moderate student discussions and grade peer assignments","Receive compensation based on hours logged monthly"]},
+  {id:48, title:"Shopify Dropshipping Store",      desc:"Launch dropship store with AI product research and automated fulfillment. Top stores earn $5000–$50K/month.",           reward:2000, cur:"$",ef:3,tag:"freelance",region:"global",type:"highpay", src:"Shopify",         trust:.76,fresh:.82, link:"https://www.shopify.com/dropshipping",deepLabel:"shopify.com/dropshipping",howTo:["Start a free Shopify trial at shopify.com/dropshipping","Install DSers or AutoDS for AliExpress product sourcing","Use AI tools to find winning products and write product descriptions","Set up payment gateway (Stripe or PayPal)","Run Facebook or TikTok ads; scale products that convert well"]},
+  {id:49, title:"eBay Arbitrage Reselling",        desc:"Buy discounted items and resell on eBay. AI tools find hot products. Average margin 30%–80% per flip.",                  reward:300,  cur:"$",ef:2,tag:"freelance",region:"global",type:"trending",src:"eBay",            trust:.78,fresh:.78, link:"https://www.ebay.com/",deepLabel:"ebay.com",howTo:["Create a free eBay seller account","Use AI tools like Zik Analytics to find trending products","Source items from thrift stores, clearance sales or wholesale","List on eBay with optimized titles and photos","Ship on sale and keep 30–80% margin; scale top-selling items"]},
+  {id:50, title:"Twitch Affiliate Streaming",      desc:"Stream games or coding. Reach affiliate at 50 followers. Earn via subscriptions and donations. $200–$2000/month.",       reward:500,  cur:"$",ef:3,tag:"freelance",region:"global",type:"trending",src:"Twitch",          trust:.79,fresh:.80, link:"https://www.twitch.tv/",deepLabel:"twitch.tv",howTo:["Create a Twitch account and set up streaming software (OBS)","Stream consistently 3–4 times per week for 30+ min sessions","Grow to 50 followers + 3 avg concurrent viewers for Affiliate","Apply for Twitch Affiliate status in your dashboard","Earn from subscriptions ($2.50–$4.99 each) and Bits donations"]},
+  {id:51, title:"Webflow Agency Partner",          desc:"Listed in Webflow's directory, receive inbound leads from companies needing premium no-code websites built fast.",         reward:1500, cur:"$",ef:3,tag:"freelance",region:"global",type:"highpay", src:"Webflow",         trust:.86,fresh:.82, link:"https://webflow.com/partners",deepLabel:"webflow.com/partners",howTo:["Create a Webflow Expert account and complete 2+ client projects","Apply to the Webflow Partner Program at webflow.com/partners","Submit portfolio of Webflow builds for review","Once approved, create a public agency profile in their directory","Receive inbound client leads and close at $1500–$10,000 per project"]},
+  // GLOBAL — AI TOOLS & BUILDS (12)
+  {id:52, title:"GPT Prompt Engineering Packs",    desc:"Package AI prompt collections on Gumroad. Top sellers earn $500–$5000/month. AI creates content — you bundle.",         reward:89,   cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Gumroad",          trust:.87,fresh:.92, link:"https://gumroad.com/",deepLabel:"gumroad.com",howTo:["Create a free Gumroad seller account","Use ChatGPT to create 50–200 tested prompts for a niche (e.g., marketing)","Design a simple PDF or Notion doc with your prompt pack","List on Gumroad at $9–$49 with a compelling title and preview","Promote on Twitter/X, Reddit and ProductHunt for sales momentum"]},
+  {id:53, title:"Notion AI Template Marketplace",  desc:"Build and sell Notion templates on Etsy or Gumroad. AI assists design 10x faster. True passive income once listed.",     reward:200,  cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Notion/Gumroad",  trust:.84,fresh:.80, link:"https://www.notion.so/templates",deepLabel:"notion.so/templates",howTo:["Design a high-value Notion template (e.g., business OS, study planner)","Use AI to generate all text, structures and example content","Duplicate the template and set it to 'Public' in Notion","List on Gumroad or Etsy with screenshots and a demo video","Earn passively as each download requires zero extra work"]},
+  {id:54, title:"ChatGPT GPT Store Builder",       desc:"Create custom GPTs on OpenAI's GPT Store. Early builders earn via revenue share. Featured GPTs get viral traffic.",      reward:500,  cur:"$",ef:3,tag:"ai",      region:"global",type:"ai-picks",src:"OpenAI",           trust:.93,fresh:1.0, link:"https://chatgpt.com/gpts/editor",deepLabel:"chatgpt.com/gpts/editor",howTo:["Go to chatgpt.com/gpts/editor (requires ChatGPT Plus)","Click 'Create a GPT' and describe your GPT's purpose","Add custom instructions, knowledge files and actions","Configure the profile photo and name","Publish publicly and share your GPT link on social media for traffic"]},
+  {id:55, title:"Lemon Squeezy Digital Products",  desc:"Sell AI-generated ebooks, checklists, SaaS templates. Handles payments, delivery. You earn 100% of profits.",          reward:300,  cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Lemon Squeezy",   trust:.86,fresh:.88, link:"https://www.lemonsqueezy.com/",deepLabel:"lemonsqueezy.com",howTo:["Create a free store at lemonsqueezy.com","Use AI to generate an ebook, toolkit or SaaS template","Upload your digital product and set the price","Customize your storefront and checkout page","Share your store link; Lemon Squeezy handles payment and delivery automatically"]},
+  {id:56, title:"Printful AI Merch Store",         desc:"Design AI-generated graphics for t-shirts and mugs. Zero upfront cost — print on demand. Keep profit margin per sale.", reward:120,  cur:"$",ef:2,tag:"ai",      region:"global",type:"trending",src:"Printful",         trust:.83,fresh:.82, link:"https://www.printful.com/",deepLabel:"printful.com",howTo:["Create a free Printful account and connect to Etsy or Shopify","Generate designs using Midjourney or Adobe Firefly","Upload designs to Printful's product builder (t-shirts, mugs, hoodies)","Publish products — Printful sets base cost, you set retail price","Printful prints and ships on every order; you keep the margin"]},
+  {id:57, title:"Midjourney Art Sales",            desc:"Sell AI art on Etsy, Adobe Stock, Shutterstock. Top sellers list 500+ works earning $500–$5000/month in royalties.",    reward:400,  cur:"$",ef:2,tag:"ai",      region:"global",type:"highpay", src:"Etsy/Shutterstock",trust:.80,fresh:.83, link:"https://www.etsy.com/sell",deepLabel:"etsy.com/sell",howTo:["Generate high-quality AI art using Midjourney (v6+)","Upscale images to 4K+ resolution using Topaz AI","Open an Etsy shop and list as digital downloads ($3–$15 each)","Also submit to Adobe Stock and Shutterstock for royalties","Batch-upload 100+ items to maximize passive income from day 1"]},
+  {id:58, title:"AI YouTube Automation Channel",   desc:"AI voiceover + stock footage faceless YouTube channel. Monetize via AdSense. Creators report $500–$10K/month.",          reward:1000, cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"YouTube",         trust:.75,fresh:.85, link:"https://www.youtube.com/creators/",deepLabel:"youtube.com/creators",howTo:["Pick a niche (finance, history, motivational facts)","Write scripts using ChatGPT; generate voiceover with ElevenLabs","Edit using CapCut or Premiere Pro with royalty-free stock footage","Upload 3–5 videos per week consistently","Reach 1000 subscribers + 4000 watch hours to apply for monetization"]},
+  {id:59, title:"Amazon KDP Self-Publishing",      desc:"Publish AI-assisted books on Kindle. Earn 35%–70% royalties. Low-content books (planners, journals) easy to produce.",   reward:500,  cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Amazon KDP",       trust:.83,fresh:.83, link:"https://kdp.amazon.com/",deepLabel:"kdp.amazon.com",howTo:["Create an account at kdp.amazon.com","Use ChatGPT to write or outline your book content","Design a cover using Canva (3D ebook mockup recommended)","Upload manuscript and cover to KDP","Set royalty at 70% for $2.99–$9.99 pricing and publish globally"]},
+  {id:60, title:"Etsy Digital Downloads Store",   desc:"Sell AI-designed digital files on Etsy — wall art, planners, SVGs. Top shops earn $2000–$20K/month passively.",         reward:800,  cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Etsy",             trust:.81,fresh:.85, link:"https://www.etsy.com/sell",deepLabel:"etsy.com/sell",howTo:["Open an Etsy shop at etsy.com/sell (one-time $0.20 listing fee)","Use Midjourney + Canva to create wall art, printable planners or SVGs","Upload as a digital download — buyer gets instant access","Research trending keywords using EtsyHunt or eRank","List 50–100 products to build a passive income catalogue"]},
+  {id:61, title:"Substack Newsletter",             desc:"Launch paid Substack newsletter. Charge $7–$20/month. 500 subscribers = $3500–$10K/month. AI writes drafts for you.",   reward:1000, cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"Substack",        trust:.83,fresh:.83, link:"https://substack.com/",deepLabel:"substack.com",howTo:["Create a free publication at substack.com","Define a clear niche and write 3 free posts to build an audience","Enable paid subscriptions ($7–$20/month)","Use Claude or GPT to draft newsletters — edit before publishing","Promote via Twitter/X and LinkedIn to grow subscribers organically"]},
+  {id:62, title:"Replit Bounties Development",     desc:"Solve coding bounties posted on Replit by companies. Earn $50–$500 per bounty. AI pair programming = 5x faster.",        reward:300,  cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Replit",           trust:.87,fresh:.88, link:"https://replit.com/bounties",deepLabel:"replit.com/bounties",howTo:["Create a free Replit account and verify your developer profile","Visit replit.com/bounties to browse open coding bounties","Filter by your language (Python, JS, etc.) and budget","Submit a solution using Replit's online editor with AI coding help","Get paid via Replit's built-in payment system once solution is accepted"]},
+  {id:63, title:"Glide Apps AI No-Code Builder",   desc:"Build mobile apps from Google Sheets with Glide. Sell templates or custom apps for $500–$2000 each. Zero code.",         reward:800,  cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Glide Apps",       trust:.84,fresh:.83, link:"https://www.glideapps.com/",deepLabel:"glideapps.com",howTo:["Sign up free at glideapps.com","Connect a Google Sheet as your data source","Use AI layout suggestions to build your app UI","Add features like forms, lists, maps and user login","Publish your app and sell access or the template on Gumroad"]},
+  // GLOBAL — SURVEYS & RESEARCH (7)
+  {id:64, title:"Ysense Global Surveys",           desc:"Complete surveys from Fortune 500 brands. Earn $0.10–$2 per survey. PayPal payout. Works in 130+ countries.",           reward:25,   cur:"$",ef:1,tag:"survey",  region:"global",type:"instant", src:"Ysense",           trust:.78,fresh:.90, link:"https://www.ysense.com/",deepLabel:"ysense.com",howTo:["Register free at ysense.com with email","Complete your profile to unlock more paid surveys","Check the dashboard daily for available surveys","Complete each survey fully without rushing","Cash out via PayPal when you reach $10 minimum"]},
+  {id:65, title:"Prolific Academic Research",      desc:"Participate in university studies. Earn $6–$12/hr on Prolific. Higher quality studies and better pay than most apps.",    reward:12,   cur:"$",ef:1,tag:"survey",  region:"global",type:"instant", src:"Prolific",         trust:.90,fresh:.88, link:"https://www.prolific.com/",deepLabel:"prolific.com",howTo:["Sign up at prolific.com as a participant","Fill in demographic details to match more studies","Log in regularly and grab studies quickly (fill up fast)","Complete studies honestly — Prolific checks attention","Withdraw earnings to Payoneer or Circle wallet at any time"]},
+  {id:66, title:"Survey Junkie Premium",           desc:"High-paying survey panel. Earn $1–$5 per survey. Join 20M+ members. Consistent $40–$100/month for regular users.",       reward:50,   cur:"$",ef:1,tag:"survey",  region:"global",type:"instant", src:"Survey Junkie",   trust:.82,fresh:.85, link:"https://www.surveyjunkie.com/",deepLabel:"surveyjunkie.com",howTo:["Create a free account at surveyjunkie.com","Complete your profile for higher-paying survey matches","Check daily for new available surveys","Each survey earns points — 100 points = $1","Redeem via PayPal or e-gift card at 500 points ($5) minimum"]},
+  {id:67, title:"UserTesting Website Reviews",     desc:"Record yourself testing websites for 20 minutes. Earn $10 per test. $60/hr for live interviews. High demand.",           reward:60,   cur:"$",ef:1,tag:"survey",  region:"global",type:"instant", src:"UserTesting",      trust:.88,fresh:.87, link:"https://www.usertesting.com/be-a-user-tester",deepLabel:"usertesting.com/be-a-user-tester",howTo:["Apply at usertesting.com/be-a-user-tester","Complete a practice test to demonstrate your feedback style","Get approved (usually within 48 hrs)","Receive test opportunities by email or in your dashboard","Record your screen + commentary; earn $10 per 20-min test via PayPal"]},
+  {id:68, title:"Respondent.io Expert Studies",    desc:"High-value research for professionals. Earn $100–$750 per interview. Recruiters match by expertise. Finance/tech focused.",reward:200,  cur:"$",ef:1,tag:"survey",  region:"global",type:"highpay", src:"Respondent.io",   trust:.91,fresh:.85, link:"https://www.respondent.io/",deepLabel:"respondent.io",howTo:["Sign up at respondent.io with LinkedIn for faster matching","Complete your professional profile (job title, industry, income)","Apply to studies matching your background","If selected, complete a screener call","Participate in the 45–60 min interview and earn $100–$750 via PayPal"]},
+  {id:69, title:"Pinecone Research Panel",         desc:"Invite-only high-paying survey panel. Earn $3 per short survey. $25–$80/month consistently. Product testing available.", reward:40,   cur:"$",ef:1,tag:"survey",  region:"global",type:"instant", src:"Pinecone",         trust:.87,fresh:.82, link:"https://pineconepanel.com/",deepLabel:"pineconepanel.com",howTo:["Visit pineconepanel.com and join the waitlist or use a referral link","Complete the initial profile when invited","Respond quickly when survey invitations arrive by email","Complete surveys (typically 5–10 minutes)","Earn $3 per survey; payments made via PayPal or cheque"]},
+  {id:70, title:"Clickworker Tasks",               desc:"Write short texts, categorize products, test apps. Earn $8–$15/hr. Weekly PayPal payments. No prior experience needed.", reward:12,   cur:"$",ef:2,tag:"survey",  region:"global",type:"trending",src:"Clickworker",      trust:.80,fresh:.75, link:"https://www.clickworker.com/",deepLabel:"clickworker.com",howTo:["Register at clickworker.com and verify your email","Complete assessments to unlock specific task categories","Browse available tasks in your UHRS or Clickworker workspace","Complete tasks accurately — quality affects future task access","Receive weekly PayPal payments every Thursday"]},
+  // GLOBAL — CRYPTO & CASHBACK (9)
+  {id:71, title:"Coinbase Learn & Earn",           desc:"Watch crypto education videos and earn free BTC, ETH, or altcoins worth $10–$30 instantly. No investment needed.",       reward:30,   cur:"$",ef:1,tag:"crypto",  region:"global",type:"instant", src:"Coinbase",         trust:.91,fresh:.88, link:"https://www.coinbase.com/learn/coinbase-earn",deepLabel:"coinbase.com/learn/coinbase-earn",howTo:["Create a verified Coinbase account at coinbase.com","Go to 'Earn' section in the Coinbase app","Select an available crypto quiz (e.g., ALGO, XLM)","Watch the short educational videos","Answer quiz questions correctly to receive free crypto instantly"]},
+  {id:72, title:"Binance Referral Commission",     desc:"Refer traders and earn 20% of trading fees permanently. One active trader = $50–$500/month passive commissions.",        reward:200,  cur:"$",ef:1,tag:"crypto",  region:"global",type:"highpay", src:"Binance",          trust:.79,fresh:.75, link:"https://www.binance.com/en/activity/referral",deepLabel:"binance.com/en/activity/referral",howTo:["Log into your Binance account","Go to Dashboard > Referral Program","Copy your referral link or share your QR code","Share with friends interested in crypto trading","Earn 20% of their trading fees permanently in your Binance wallet"]},
+  {id:73, title:"Kraken Spot Trading Bonus",       desc:"Open Kraken and trade $100 in spot — get $10 in BTC bonus. Referral earns $10 per friend who trades 30 days.",           reward:10,   cur:"$",ef:1,tag:"crypto",  region:"global",type:"instant", src:"Kraken",           trust:.88,fresh:.80, link:"https://www.kraken.com/",deepLabel:"kraken.com",howTo:["Create a verified Kraken account","Complete identity verification (Level 2)","Deposit at least $100 via bank transfer or card","Trade $100 in spot markets","Receive $10 BTC bonus within 10 business days in your Kraken account"]},
+  {id:74, title:"Rakuten Shopping Cashback",       desc:"Shop at 3500+ stores through Rakuten. Earn 1%–40% cashback. Get $30 welcome bonus after first qualifying purchase.",      reward:30,   cur:"$",ef:1,tag:"cashback",region:"global",type:"instant", src:"Rakuten",          trust:.90,fresh:.88, link:"https://www.rakuten.com/",deepLabel:"rakuten.com",howTo:["Sign up free at rakuten.com","Install the Rakuten browser extension","Browse to any partner store through Rakuten's portal","Make a purchase of $30 or more","Receive $30 bonus + ongoing cashback paid quarterly via PayPal or cheque"]},
+  {id:75, title:"Honey Savings Extension",         desc:"Automatically earn Gold points on every purchase at 30,000+ stores. Redeem for PayPal cash or Amazon gift cards.",       reward:20,   cur:"$",ef:1,tag:"cashback",region:"global",type:"instant", src:"PayPal Honey",     trust:.89,fresh:.82, link:"https://www.joinhoney.com/",deepLabel:"joinhoney.com",howTo:["Visit joinhoney.com and install the browser extension","Create a free account or link your PayPal","Shop online as normal — Honey activates at checkout","Honey applies best coupon codes automatically","Earn Gold on purchases; redeem for PayPal cash or Amazon gift cards"]},
+  {id:76, title:"Capital One Shopping Rewards",    desc:"Automatic coupon stacking + cashback at checkout. Earn points redeemable for gift cards or travel credits globally.",     reward:25,   cur:"$",ef:1,tag:"cashback",region:"global",type:"instant", src:"Capital One",      trust:.88,fresh:.83, link:"https://shopping.capitalone.com/",deepLabel:"shopping.capitalone.com",howTo:["Visit shopping.capitalone.com and install the browser extension","Create a free account (no Capital One card required)","Shop online at any of 15,000+ partner stores","Extension stacks coupons and tracks cashback automatically","Redeem points for gift cards, travel credits or PayPal cash"]},
+  {id:77, title:"Robinhood Free Stock Refer",      desc:"Invite friends to Robinhood and both get a free stock worth $5–$200. Each referral = one more free stock. Up to $1500.",  reward:75,   cur:"$",ef:1,tag:"refer",   region:"global",type:"instant", src:"Robinhood",        trust:.84,fresh:.82, link:"https://join.robinhood.com/",deepLabel:"join.robinhood.com",howTo:["Open the Robinhood app and go to 'Refer a Friend'","Share your unique referral link via text or social media","Friend signs up and links a bank account using your link","Both of you receive a randomly selected free stock ($5–$200)","Repeat for up to $1500 in total free stock rewards"]},
+  {id:78, title:"Acorns Round-Up Investing",       desc:"Round up purchases and invest the difference automatically. $20 bonus when you invest for 30 days. Passive wealth.",      reward:20,   cur:"$",ef:1,tag:"invest",  region:"global",type:"instant", src:"Acorns",           trust:.86,fresh:.80, link:"https://www.acorns.com/",deepLabel:"acorns.com",howTo:["Sign up at acorns.com or download the app","Link your debit or credit card","Enable Round-Ups to invest spare change automatically","Keep the account active and investing for 30 days","Receive $20 bonus credited to your Acorns portfolio"]},
+  {id:79, title:"M1 Finance Account Bonus",        desc:"Open M1 Finance brokerage + checking and get $30 bonus. Commission-free investing with automated rebalancing.",           reward:30,   cur:"$",ef:1,tag:"invest",  region:"global",type:"instant", src:"M1 Finance",       trust:.84,fresh:.78, link:"https://m1.com/",deepLabel:"m1.com",howTo:["Visit m1.com and click 'Get Started'","Complete registration and identity verification","Fund your account with at least $100","Open both brokerage and M1 checking accounts","Receive $30 bonus credited within 14 days of account funding"]},
+  // GLOBAL — REFERRAL PROGRAMS (7)
+  {id:80, title:"PayPal Referral Bonus",           desc:"Refer friends to PayPal. Earn $10 when they sign up and send $5. Global eligibility. Easy social media sharing.",         reward:10,   cur:"$",ef:1,tag:"refer",   region:"global",type:"instant", src:"PayPal",           trust:.93,fresh:.85, link:"https://www.paypal.com/in/webapps/mpp/referral-program",deepLabel:"paypal.com/referral-program",howTo:["Log into your PayPal account","Go to Account Settings > Refer a Friend","Copy your referral link","Share with friends via WhatsApp, email or social media","Earn $10 when your friend signs up and completes a $5 send"]},
+  {id:81, title:"Wise Multi-Currency Referral",    desc:"Refer 3 friends to Wise and earn a £50 fee-free transfer bonus. Friends save on their first international transfer too.",   reward:60,   cur:"$",ef:1,tag:"refer",   region:"global",type:"instant", src:"Wise",             trust:.92,fresh:.87, link:"https://wise.com/invite/",deepLabel:"wise.com/invite",howTo:["Log into your Wise account","Go to 'Invite Friends' in the menu","Copy your personal invite link","Share with 3+ friends who transfer money internationally","Once each friend makes their first transfer, earn £50 fee-free bonus per batch"]},
+  {id:82, title:"Airbnb Host Referral",            desc:"Refer a friend to become an Airbnb host. Both earn bonus up to $100 after their first successful guest check-in.",          reward:100,  cur:"$",ef:1,tag:"refer",   region:"global",type:"highpay", src:"Airbnb",           trust:.91,fresh:.80, link:"https://www.airbnb.com/r/refer",deepLabel:"airbnb.com/r/refer",howTo:["Go to airbnb.com and log into your host account","Navigate to 'Refer Hosts' in your profile menu","Copy your referral link","Share with a friend who has a spare room or property","Both earn up to $100 bonus after their first guest checks out"]},
+  {id:83, title:"Revolut Premium Referral",        desc:"Refer friends to Revolut and earn £10–£50 per referral by tier. Friend gets free card delivery. Metal tier = $50.",       reward:50,   cur:"$",ef:1,tag:"refer",   region:"global",type:"instant", src:"Revolut",          trust:.88,fresh:.85, link:"https://www.revolut.com/referral/",deepLabel:"revolut.com/referral",howTo:["Open the Revolut app and go to Profile > Refer a Friend","Share your unique referral link","Friend downloads Revolut and signs up with your link","They order a Revolut card (free delivery with referral)","You earn £10–£50 depending on their account tier chosen"]},
+  {id:84, title:"AppSumo Affiliate",               desc:"Promote AppSumo software deals. Earn 5%–100% commission per sale. Top affiliates earn $5,000–$30,000/month passively.",   reward:300,  cur:"$",ef:2,tag:"refer",   region:"global",type:"highpay", src:"AppSumo",          trust:.83,fresh:.80, link:"https://appsumo.com/affiliates/",deepLabel:"appsumo.com/affiliates",howTo:["Apply at appsumo.com/affiliates with your website or audience details","Get approved (usually 24–48 hrs)","Browse AppSumo deals and generate affiliate links","Promote via blog posts, YouTube reviews or email newsletters","Earn 5–100% commission on every sale through your link"]},
+  {id:85, title:"ClickBank Digital Affiliate",     desc:"Promote digital products on ClickBank. Earn 50%–75% commission per sale. AI creates landing pages and ad copy for you.",   reward:150,  cur:"$",ef:2,tag:"refer",   region:"global",type:"trending",src:"ClickBank",        trust:.72,fresh:.78, link:"https://www.clickbank.com/",deepLabel:"clickbank.com",howTo:["Create a free ClickBank affiliate account","Browse the Marketplace and filter by Gravity (popularity)","Pick a high-gravity product with 50–75% commission","Generate your HopLink (affiliate tracking URL)","Promote via paid ads, SEO articles or social content"]},
+  {id:86, title:"Impact.com Brand Partnerships",   desc:"Connect with Airbnb, Canva, Semrush on Impact. Earn competitive commissions via content, SEO, or social channels.",        reward:250,  cur:"$",ef:2,tag:"refer",   region:"global",type:"trending",src:"Impact.com",       trust:.85,fresh:.80, link:"https://impact.com/partnerships/",deepLabel:"impact.com/partnerships",howTo:["Apply as a publisher at impact.com","Complete your profile with your website, audience size and niche","Browse the brand directory and apply to programs you match","Receive custom affiliate links once approved by each brand","Publish content with tracked links and earn commission on conversions"]},
+  // GLOBAL — TEACH & COURSES (4)
+  {id:87, title:"Udemy Course Creator",            desc:"Create online course using AI slides + narration. Top Udemy instructors earn $10K–$100K/year from evergreen content.",    reward:1000, cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"Udemy",            trust:.85,fresh:.82, link:"https://www.udemy.com/teaching/"},
+  {id:88, title:"Teachable Premium Courses",       desc:"Host your courses on Teachable. Keep 90%+ of revenue. AI generates curriculum, quizzes, and marketing copy for you.",     reward:800,  cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"Teachable",        trust:.84,fresh:.80, link:"https://teachable.com/"},
+  {id:89, title:"TikTok Creator Fund",             desc:"Join Creator Fund at 10K followers. Earn $0.02–$0.04 per 1000 views. AI generates trending scripts for viral content.",    reward:300,  cur:"$",ef:2,tag:"ai",      region:"global",type:"trending",src:"TikTok",           trust:.74,fresh:.83, link:"https://www.tiktok.com/creator-academy/"},
+  {id:90, title:"YouTube Shorts Creator",          desc:"Post AI-generated Shorts. Earn from YouTube Partner Program. Top Shorts creators earn $500–$3000/month from ads.",         reward:600,  cur:"$",ef:2,tag:"ai",      region:"global",type:"trending",src:"YouTube Shorts",   trust:.78,fresh:.88, link:"https://www.youtube.com/creators/"},
+  // GLOBAL — MICRO-TASKS & MISC (10)
+  {id:87, title:"Udemy Course Creator",            desc:"Create online course using AI slides + narration. Top Udemy instructors earn $10K–$100K/year from evergreen content.",    reward:1000, cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"Udemy",            trust:.85,fresh:.82, link:"https://www.udemy.com/teaching/",deepLabel:"udemy.com/teaching",howTo:["Go to udemy.com/teaching and create an instructor account","Plan your course outline using ChatGPT for structure","Record 5–10 hours of lessons (screen record or webcam)","Upload to Udemy with AI-written descriptions and thumbnails","Promote during launch week; earn 37–97% royalties on every sale"]},
+  {id:88, title:"Teachable Premium Courses",       desc:"Host your courses on Teachable. Keep 90%+ of revenue. AI generates curriculum, quizzes, and marketing copy for you.",     reward:800,  cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"Teachable",        trust:.84,fresh:.80, link:"https://teachable.com/",deepLabel:"teachable.com",howTo:["Sign up for a free Teachable account","Use AI to generate a full course curriculum for your expertise","Record video lessons and upload with quizzes","Set your price and configure payment (Stripe/PayPal)","Market via email list or social media; keep 90%+ of every sale"]},
+  {id:89, title:"TikTok Creator Fund",             desc:"Join Creator Fund at 10K followers. Earn $0.02–$0.04 per 1000 views. AI generates trending scripts for viral content.",    reward:300,  cur:"$",ef:2,tag:"ai",      region:"global",type:"trending",src:"TikTok",           trust:.74,fresh:.83, link:"https://www.tiktok.com/creator-academy/",deepLabel:"tiktok.com/creator-academy",howTo:["Create a TikTok account and grow to 10,000 followers","Use AI tools to generate trending script ideas in your niche","Post 1–3 videos daily using trending sounds and hashtags","Apply for Creator Fund in TikTok Studio once eligible","Earnings credited monthly based on views and engagement"]},
+  {id:90, title:"YouTube Shorts Creator",          desc:"Post AI-generated Shorts. Earn from YouTube Partner Program. Top Shorts creators earn $500–$3000/month from ads.",         reward:600,  cur:"$",ef:2,tag:"ai",      region:"global",type:"trending",src:"YouTube Shorts",   trust:.78,fresh:.88, link:"https://www.youtube.com/creators/",deepLabel:"youtube.com/creators",howTo:["Create a YouTube channel in your chosen niche","Use AI to generate 60-second short video scripts","Record or generate video using CapCut + AI voiceover","Post daily Shorts with relevant hashtags and titles","Apply for YouTube Partner Program at 500 subscribers + 3M Shorts views"]},
+  {id:91, title:"Amazon MTurk Micro Tasks",        desc:"Complete HITs on Mechanical Turk — image labeling, sentiment analysis, data cleaning. Earn $5–$15/hr. Flexible timing.", reward:15,   cur:"$",ef:2,tag:"ai",      region:"global",type:"trending",src:"Amazon MTurk",     trust:.82,fresh:.70, link:"https://www.mturk.com/",deepLabel:"mturk.com",howTo:["Register at mturk.com as a Worker","Complete the initial qualification tasks","Browse available HITs filtered by pay rate","Complete image labeling, survey or classification tasks","Earnings transferred to Amazon Payments; withdraw to bank weekly"]},
+  {id:92, title:"Remotasks AI Labeling",           desc:"Label images, transcribe audio, draw polygons for AI training data. Earn $3–$15/hr. Paid weekly. High demand globally.",  reward:10,   cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Remotasks",        trust:.81,fresh:.83, link:"https://www.remotasks.com/",deepLabel:"remotasks.com",howTo:["Register at remotasks.com and complete onboarding","Take training modules for your chosen task category (free)","Pass the quality assessment to unlock paid tasks","Complete tasks daily in your dashboard at your own pace","Receive weekly payments via Stripe to your bank account"]},
+  {id:93, title:"Spare5 Vision AI Tasks",          desc:"Complete image and video annotation for AI on Spare5. Earn $5–$20/hr for bounding boxes, tagging, classification tasks.",  reward:15,   cur:"$",ef:2,tag:"ai",      region:"global",type:"ai-picks",src:"Spare5",           trust:.78,fresh:.78, link:"https://spare5.com/",deepLabel:"spare5.com",howTo:["Sign up at spare5.com with email","Complete a short skills assessment for visual tasks","Once approved, check the task queue for annotation jobs","Draw bounding boxes, tag objects or classify images","Earnings paid via PayPal on a regular payout schedule"]},
+  {id:94, title:"Podcast Monetization Spotify",    desc:"AI-assisted podcast on Spotify. Earn $18–$50 CPM from brand sponsorships at 5000 downloads per episode milestone.",       reward:400,  cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"Spotify",          trust:.80,fresh:.80, link:"https://podcasters.spotify.com/",deepLabel:"podcasters.spotify.com",howTo:["Sign up at podcasters.spotify.com","Use AI (ElevenLabs or Descript) to record and edit your episodes","Release 10+ episodes consistently on a weekly schedule","Grow to 5000 downloads per episode to attract sponsors","Join Spotify's Ads or reach out directly to brands in your niche"]},
+  {id:95, title:"GitHub Copilot Consulting",       desc:"Freelance as AI coding workflow specialist. Help companies adopt Copilot. Charge $100–$200/hr for setup and training.",    reward:200,  cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"GitHub",           trust:.88,fresh:.85, link:"https://github.com/features/copilot",deepLabel:"github.com/features/copilot",howTo:["Get certified in GitHub Copilot and AI-assisted development","Build a portfolio of Copilot-enhanced projects on GitHub","List your services on Upwork or LinkedIn as an AI dev consultant","Offer a 2-hr onboarding workshop for $200–$400","Scale to team training engagements at $100–$200/hr"]},
+  {id:96, title:"No-Code Bubble.io Apps",          desc:"Build and sell MVP apps for startups on Bubble.io. Zero coding needed. AI generates UI flows. Earn $1000–$5000/project.", reward:2000, cur:"$",ef:3,tag:"ai",      region:"global",type:"highpay", src:"Bubble.io",        trust:.82,fresh:.83, link:"https://bubble.io/",deepLabel:"bubble.io",howTo:["Learn Bubble.io using free tutorials on bubble.io/learn","Build 2–3 portfolio apps (SaaS, marketplace, booking tool)","List services on Contra or Upwork as a Bubble developer","Close clients needing MVPs — charge $1000–$5000 per project","Deliver in 1–3 weeks using Bubble's AI-assisted editor"]},
+  {id:97, title:"Product Hunt Launch Consulting",  desc:"Help SaaS founders launch on Product Hunt. Earn $200–$500 per client. AI writes all copy, strategy, community outreach.", reward:500,  cur:"$",ef:3,tag:"freelance",region:"global",type:"highpay", src:"Product Hunt",    trust:.89,fresh:.78, link:"https://www.producthunt.com/",deepLabel:"producthunt.com",howTo:["Join Product Hunt and engage with the community for 30+ days","Study top launches and analyze what made them successful","Offer launch consulting packages ($200–$500) on Contra or Twitter","Use AI to write product descriptions, comments and hunter outreach","Execute launch day with pre-scheduled posts and real-time engagement"]},
+  {id:98, title:"ShareASale Network Affiliate",    desc:"Join 4000+ affiliate programs on ShareASale across fashion, tech, finance niches. Earn 4%–30% commission reliably.",       reward:200,  cur:"$",ef:2,tag:"refer",   region:"global",type:"trending",src:"ShareASale",       trust:.80,fresh:.77, link:"https://www.shareasale.com/",deepLabel:"shareasale.com",howTo:["Register as an affiliate at shareasale.com","Browse 4000+ merchant programs and apply to ones matching your niche","Get approved and receive your unique affiliate tracking links","Publish content (blogs, YouTube, Pinterest) with embedded links","Earn 4–30% commission on every confirmed sale; paid monthly"]},
+  {id:99, title:"Public.com Social Investing",     desc:"Open Public brokerage and get a free slice of stock up to $50. Refer friends for more free stocks. Zero-commission.",      reward:50,   cur:"$",ef:1,tag:"invest",  region:"global",type:"instant", src:"Public.com",       trust:.83,fresh:.80, link:"https://public.com/",deepLabel:"public.com",howTo:["Download Public app and sign up at public.com","Complete identity verification","Link your bank account and deposit any amount","Receive a free stock slice worth up to $50 automatically","Refer friends via your referral link to earn more free stock slices"]},
+  {id:100,title:"Stash Banking + Investing",       desc:"Open Stash account and get $20 bonus after first $5 investment. Earn stock rewards on everyday debit card purchases.",     reward:20,   cur:"$",ef:1,tag:"invest",  region:"global",type:"instant", src:"Stash",            trust:.81,fresh:.78, link:"https://www.stash.com/",deepLabel:"stash.com",howTo:["Download Stash app and create an account at stash.com","Complete identity and bank verification","Invest at least $5 in any stock or ETF","Receive $20 bonus credited to your Stash portfolio within 5 days","Earn Stock-Back rewards (fractional shares) when you use your Stash debit card"]},
+];
+
+/* ── AI SCORING ── score = (reward_norm * trust * freshness) / effort */
+const MAX_R = Math.max(...DB.map(o=>o.reward));
+function score(o){ return Math.round(((o.reward/MAX_R)*o.trust*o.fresh/o.ef)*1000)/10; }
+function prepare(){
+  return DB.map(o=>({...o,
+    score:score(o)+(Math.random()*3-1.5),
+    fresh:Math.min(1,o.fresh+(Math.random()*.08-.04))
+  })).sort((a,b)=>b.score-a.score);
+}
+
+/* ── STATE ── */
+const SHOW_INIT=20;
+let offers=prepare(), activeF="all", srchQ="", expanded={};
+
+/* ── META ── */
+const TM={cashback:{cls:"t-cashback",icon:"💳",label:"Cashback"},refer:{cls:"t-refer",icon:"🔗",label:"Refer & Earn"},ai:{cls:"t-ai",icon:"🤖",label:"AI Tool"},freelance:{cls:"t-freelance",icon:"💼",label:"Freelance"},survey:{cls:"t-survey",icon:"📋",label:"Survey"},crypto:{cls:"t-crypto",icon:"🪙",label:"Crypto"},invest:{cls:"t-invest",icon:"📈",label:"Invest"},app:{cls:"t-app",icon:"📱",label:"App"}};
+const EM={1:{cls:"ef-1",icon:"🟢",label:"Low"},2:{cls:"ef-2",icon:"🟡",label:"Medium"},3:{cls:"ef-3",icon:"🔴",label:"High"}};
+function scColor(s){return s>=55?"var(--gold2)":s>=30?"var(--teal)":"var(--sub)"}
+
+/* ── FILTER ── */
+function filtered(){
+  let l=[...offers];
+  if(activeF==="india")  l=l.filter(o=>o.region==="india");
+  if(activeF==="global") l=l.filter(o=>o.region==="global");
+  if(activeF==="instant")l=l.filter(o=>o.type==="instant"||o.ef===1);
+  if(activeF==="highpay")l=l.filter(o=>o.type==="highpay"||(o.cur==="$"?o.reward>=100:o.reward>=500));
+  if(srchQ.trim()){const q=srchQ.toLowerCase();l=l.filter(o=>o.title.toLowerCase().includes(q)||o.desc.toLowerCase().includes(q)||o.tag.includes(q)||o.src.toLowerCase().includes(q)||o.region.includes(q));}
+  return l;
+}
+
+/* ── CARD ── */
+function cardHTML(o,gr,delay){
+  const t=TM[o.tag]||{cls:"t-ai",icon:"⭐",label:o.tag};
+  const e=EM[o.ef]||EM[2];
+  const sc=Math.max(0,Math.round(o.score));
+  const tp=Math.round(o.trust*100);
+  const isTop=gr<=3;
+  const rS=`${o.cur}${o.reward.toLocaleString()}`;
+  const tBg=tp>85?"linear-gradient(90deg,#00d4aa,#00f5c4)":tp>70?"linear-gradient(90deg,#f59e0b,#fbbf24)":"linear-gradient(90deg,#ef4444,#f87171)";
+  return `<div class="o-card ${isTop?"top":""} cu" style="animation-delay:${delay}ms" onclick="openM(${o.id})">
+    <div class="shine"></div>
+    ${isTop?`<div class="rank-b" style="border-color:rgba(201,168,76,.5);color:var(--gold2);background:rgba(201,168,76,.08)">${gr===1?"🥇":gr===2?"🥈":"🥉"}</div>`:`<div class="rank-b" style="border-color:var(--rim);color:var(--dim);background:rgba(255,255,255,.02);font-size:10px">${gr}</div>`}
+    <div class="pr-9 mb-3">
+      <div class="flex items-center gap-1.5 flex-wrap mb-1.5">
+        <span class="tag ${t.cls}">${t.icon} ${t.label}</span>
+        ${isTop?'<span class="best-badge">✦ Best Today</span>':""}
+        ${o.type==="instant"?'<span class="tag" style="background:rgba(0,212,170,.07);color:var(--teal);border:1px solid rgba(0,212,170,.18);font-size:9px">⚡ INSTANT</span>':""}
+      </div>
+      <h3 class="text-sm leading-snug" style="font-weight:700">${o.title}</h3>
+    </div>
+    <p class="text-xs leading-relaxed mb-3.5" style="color:var(--sub);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${o.desc}</p>
+    <div class="flex items-end justify-between gap-2 mb-3.5">
+      <div><div class="text-xs font-semibold tracking-widest uppercase mb-1" style="color:var(--dim);font-size:9px">Reward</div><div class="font-bold text-lg leading-none" style="font-family:'Playfair Display',serif;color:var(--teal2)">${rS}</div></div>
+      <div><div class="text-xs font-semibold tracking-widest uppercase mb-1" style="color:var(--dim);font-size:9px">Effort</div><div class="text-xs font-bold ${e.cls}">${e.icon} ${e.label}</div></div>
+      <div><div class="text-xs font-semibold tracking-widest uppercase mb-1" style="color:var(--dim);font-size:9px">AI Score</div><div class="score-chip" style="border-color:${scColor(sc)};color:${scColor(sc)}">${sc}</div></div>
+    </div>
+    <div class="mb-3.5">
+      <div class="flex justify-between mb-1" style="font-size:9px;color:var(--dim)"><span class="font-semibold tracking-widest uppercase">Trust</span><span class="font-bold" style="color:${tp>85?"var(--teal)":tp>70?"var(--gold2)":"var(--rose)"}">${tp}%</span></div>
+      <div class="tbar"><div class="tfill" style="width:${tp}%;background:${tBg}"></div></div>
+    </div>
+    <div class="flex items-center justify-between">
+      <div style="font-size:10px;color:var(--dim)">${o.region==="india"?"🇮🇳":"🌐"} ${o.src}</div>
+      <button class="view-btn" onclick="event.stopPropagation();openM(${o.id})">View Offer →</button>
+    </div>
+  </div>`;
+}
+
+/* ── SECTION ── */
+function secHTML(id,title,iconStyle,allC){
+  if(!allC.length) return "";
+  const vis=allC.slice(0, expanded[id]?allC.length:SHOW_INIT);
+  const hidN=allC.length-vis.length;
+  const cards=vis.map((o,i)=>cardHTML(o,o._gr,i*55)).join("");
+  const showMore=hidN>0?`<div class="mt-8 text-center"><button class="show-more-btn" onclick="expandSec('${id}')"><span style="position:relative;z-index:1;display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg> Show ${hidN} More Offers</span></button><div class="mt-2.5 text-xs" style="color:var(--dim)">${allC.length} total offers in this section</div></div>`:
+    (allC.length>SHOW_INIT?`<div class="mt-5 text-center text-xs font-semibold" style="color:var(--dim)">✦ Showing all ${allC.length} offers</div>`:"");
+  return `<section id="sec-${id}"><div class="sec-head"><div class="sec-icon" style="${iconStyle}">${title.split(" ")[0]}</div><h2 class="sec-title">${title.split(" ").slice(1).join(" ")}</h2><div class="sec-count">${allC.length} OFFERS</div></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">${cards}</div>${showMore}</section><div class="gold-line my-12"></div>`;
+}
+
+function expandSec(id){
+  expanded[id]=true;renderAll();
+  setTimeout(()=>{const el=document.getElementById(`sec-${id}`);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})},80);
+}
+
+/* ── RENDER ── */
+function renderAll(){
+  const f=filtered();
+  f.forEach((o,i)=>o._gr=i+1);
+  const india=f.filter(o=>o.region==="india").length;
+  const avgR=f.length?Math.round(f.reduce((s,o)=>s+o.reward,0)/f.length):0;
+  const peak=f.length?Math.round(Math.max(...f.map(o=>o.score))):0;
+  document.getElementById("stTotal").textContent=f.length;
+  document.getElementById("stAvg").textContent=f.length?`${f[0].cur}${avgR}`:"—";
+  document.getElementById("stPeak").textContent=peak?`${peak}/100`:"—";
+  document.getElementById("stIndia").textContent=india;
+  document.getElementById("stTime").textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  const feed=document.getElementById("feed");
+  if(!f.length){feed.innerHTML=`<div class="text-center py-24" style="color:var(--sub)"><div style="font-size:3rem;margin-bottom:12px">🔍</div><div class="text-xl font-bold" style="font-family:'Playfair Display',serif">No offers found</div><div class="text-sm mt-2">Try a different search or filter</div></div>`;return;}
+  const trending =[...f].sort((a,b)=>b.fresh-a.fresh);
+  const highPay  =[...f].sort((a,b)=>b.reward-a.reward);
+  const instant  =f.filter(o=>o.type==="instant"||o.ef===1).sort((a,b)=>b.score-a.score);
+  const aiPicks  =f.filter(o=>o.tag==="ai").sort((a,b)=>b.score-a.score);
+  const indiaL   =f.filter(o=>o.region==="india").sort((a,b)=>b.score-a.score);
+  const globalL  =f.filter(o=>o.region==="global").sort((a,b)=>b.score-a.score);
+  let html="";
+  html+=secHTML("ai","🤖 AI Top Picks","background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(139,92,246,.06));border:1px solid rgba(139,92,246,.28)",aiPicks);
+  html+=secHTML("trending","🔥 Trending Now","background:linear-gradient(135deg,rgba(239,68,68,.18),rgba(239,68,68,.06));border:1px solid rgba(239,68,68,.28)",trending);
+  html+=secHTML("highpay","💎 Highest Paying","background:linear-gradient(135deg,rgba(0,212,170,.18),rgba(0,212,170,.06));border:1px solid rgba(0,212,170,.28)",highPay);
+  html+=secHTML("instant","⚡ Instant Earn","background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(245,158,11,.06));border:1px solid rgba(245,158,11,.28)",instant);
+  if(indiaL.length) html+=secHTML("india","🇮🇳 India Offers","background:linear-gradient(135deg,rgba(255,153,0,.18),rgba(255,153,0,.06));border:1px solid rgba(255,153,0,.28)",indiaL);
+  if(globalL.length)html+=secHTML("global","🌐 Global Offers","background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(56,189,248,.06));border:1px solid rgba(56,189,248,.28)",globalL);
+  feed.innerHTML=html;
+}
+
+/* ── SKELETON ── */
+function showSkel(){
+  const feed=document.getElementById("feed");
+  let h="";
+  for(let s=0;s<2;s++){
+    h+=`<section><div class="sec-head"><div class="skel w-9 h-9 rounded-xl"></div><div class="skel h-6 w-48 ml-3 rounded-xl"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">`;
+    for(let c=0;c<6;c++) h+=`<div class="o-card space-y-3"><div class="skel h-4 w-20 rounded-lg"></div><div class="skel h-5 w-full rounded-lg"></div><div class="skel h-3 w-full rounded"></div><div class="skel h-3 w-3/4 rounded"></div><div class="flex gap-3 mt-3"><div class="skel h-7 w-20 rounded-lg"></div><div class="skel h-7 w-16 rounded-lg"></div><div class="skel h-7 w-20 rounded-lg ml-auto"></div></div></div>`;
+    h+=`</div></section><div class="gold-line my-12"></div>`;
+  }
+  feed.innerHTML=h;
+}
+
+/* ── MODAL ── */
+function openM(id){
+  const o=offers.find(x=>x.id===id);if(!o)return;
+  const t=TM[o.tag]||{cls:"t-ai",icon:"⭐",label:o.tag};
+  const e=EM[o.ef]||EM[2];
+  const sc=Math.max(0,Math.round(o.score));
+  const tp=Math.round(o.trust*100);
+  document.getElementById("mTag").innerHTML=`<span class="tag ${t.cls}">${t.icon} ${t.label}</span>${o.type==="instant"?'<span class="tag" style="background:rgba(0,212,170,.08);color:var(--teal);border:1px solid rgba(0,212,170,.2)">⚡ Instant</span>':""}`;
+  document.getElementById("mTitle").textContent=o.title;
+  document.getElementById("mSrc").textContent=`✦ ${o.src} · ${o.region==="india"?"🇮🇳 India":"🌐 Global"}`;
+  document.getElementById("mDesc").textContent=o.desc;
+  document.getElementById("mReward").textContent=`${o.cur}${o.reward.toLocaleString()}`;
+  document.getElementById("mEffort").textContent=`${e.icon} ${e.label} Effort`;
+  document.getElementById("mEffort").className=`text-base font-bold ${e.cls}`;
+  document.getElementById("mScore").textContent=`${sc} / 100`;
+  document.getElementById("mRegion").textContent=o.region==="india"?"🇮🇳 India":"🌐 Global";
+  document.getElementById("mTrustPct").textContent=`${tp}%`;
+  document.getElementById("mTrustFill").style.width=`${tp}%`;
+  document.getElementById("mTrustFill").style.background=tp>85?"linear-gradient(90deg,#00d4aa,#00f5c4)":tp>70?"linear-gradient(90deg,#f59e0b,#fbbf24)":"linear-gradient(90deg,#ef4444,#f87171)";
+  // Direct link — support both deepLabel and linkLabel
+  const dlabel=o.deepLabel||o.linkLabel||"";
+  const directWrap=document.getElementById("mDirectWrap");
+  const directUrl=document.getElementById("mDirectUrl");
+  if(dlabel){directUrl.textContent=dlabel;directWrap.style.display="flex";}
+  else{directWrap.style.display="none";}
+  // Steps — support both howTo and steps arrays
+  const steps=o.howTo||o.steps||[];
+  const stepsEl=document.getElementById("mSteps");
+  if(steps.length){
+    stepsEl.innerHTML=steps.map((s,i)=>`<li class="flex gap-2.5 items-start"><span class="shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold" style="background:rgba(201,168,76,.15);color:var(--gold2);margin-top:1px">${i+1}</span><span class="text-xs leading-relaxed" style="color:var(--sub)">${s}</span></li>`).join("");
+    stepsEl.parentElement.style.display="block";
+  } else {
+    stepsEl.parentElement.style.display="none";
+  }
+  const linkEl=document.getElementById("mLink");
+  if(o.link){linkEl.href=o.link;linkEl.style.opacity="1";linkEl.style.pointerEvents="auto";}
+  else{linkEl.href="#";linkEl.style.opacity=".5";linkEl.style.pointerEvents="none";}
+  document.getElementById("mOvl").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeM(){document.getElementById("mOvl").classList.remove("open");document.body.style.overflow="";}
+document.getElementById("mOvl").addEventListener("click",e=>{if(e.target===document.getElementById("mOvl"))closeM();});
+
+/* ── FILTERS ── */
+function setupF(el){
+  el.querySelectorAll(".fpill").forEach(p=>{
+    p.addEventListener("click",()=>{
+      document.querySelectorAll(".fpill").forEach(x=>x.classList.remove("act"));
+      document.querySelectorAll(`.fpill[data-f="${p.dataset.f}"]`).forEach(x=>x.classList.add("act"));
+      activeF=p.dataset.f;expanded={};renderAll();
+    });
+  });
+}
+setupF(document.getElementById("fbar"));
+setupF(document.getElementById("mfbar"));
+
+/* ── SEARCH ── */
+function doSrch(v){srchQ=v;expanded={};renderAll();}
+["srch","srchM"].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener("input",e=>doSrch(e.target.value));});
+
+/* ── REFRESH ── */
+document.getElementById("refBtn").addEventListener("click",()=>{
+  const btn=document.getElementById("refBtn");btn.classList.add("spin");
+  showSkel();expanded={};
+  setTimeout(()=>{offers=prepare();renderAll();btn.classList.remove("spin");},1050);
+});
+
+/* ── INIT ── */
+showSkel();
+setTimeout(()=>renderAll(),900);
+setInterval(()=>{offers=prepare();renderAll();},5*60*1000);
+</script>
+</body>
+</html>
