@@ -1,0 +1,27 @@
+# render.yaml — Deploy AutoEarn AI backend to Render.com for FREE
+# Docs: https://render.com/docs/yaml-spec
+
+services:
+  - type: web
+    name: autoearn-ai-backend
+    env: node
+    region: singapore  # closest to India
+    plan: free         # free tier — upgrades to $7/mo for production
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: ALLOWED_ORIGIN
+        value: https://sreenathsjk.github.io  # your GitHub Pages URL
+      # Add these via Render dashboard (Environment tab) — do NOT commit:
+      # CJ_API_KEY
+      # ADMITAD_TOKEN
+      # IMPACT_ACCOUNT_SID
+      # IMPACT_AUTH_TOKEN
+      # AMAZON_ACCESS_KEY
+      # AMAZON_SECRET_KEY
+      # AMAZON_PARTNER_TAG
